@@ -49,7 +49,6 @@ class Birth {
       case "day":
         filtered = persons.filter(this.currentDay);
         if (!filtered.length) filtered = [{ name: this.emptyDay, birth: "" }];
-        else this.noticeDay(filtered);
         break;
       case "month":
         filtered = persons.filter(this.currentMonth);
@@ -98,15 +97,6 @@ class Birth {
     return birthMonth === nowMonth;
   }
 
-  noticeDay = (persons) => {
-    const body = new FormData();
-    body.append("persons", JSON.stringify(persons));
-    fetch("/notice.php", {
-      method: "POST",
-      body: body,
-    });
-  }
-
 }
 
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT-5j3rZHVbVl3fdH6Up-V_eRkb35Qb6Hev1cY0FQgi6RKGrinIiJdDkBno-XxPHMpKO_3MK6Npwakb/pub?gid=0&single=true&output=csv")
@@ -116,3 +106,5 @@ fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT-5j3rZHVbVl3fdH6Up-V_eR
     const month = new Birth("month", text);
     const all = new Birth("all", text);
   });
+
+fetch("/notice.php");
