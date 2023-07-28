@@ -11,7 +11,8 @@ foreach ($lines as $line) {
   $persons[] = (object) ["name" => $fields[0], "birth" => $fields[1]];
 }
 
-// здесь нужно применить фильтр к массиву $persons по текущей дате
+// здесь нужно отфильтровать массив $persons по совпадению ДР с текущей датой
+// если сегодня никто не родился, то дальше ничего не далеть (exit)
 
 $from = "noreply@deeplace.md";
 $to = "vladimir.plesco@gmail.com";
