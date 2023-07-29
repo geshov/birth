@@ -9,7 +9,7 @@ $persons = array_map(function($line) {
   return (object) ["name" => $fields[0], "birth" => $fields[1]];
 }, $lines);
 
-// здесь нужно отфильтровать массив $persons по совпадению ДР с текущей датой
+// здесь нужно отфильтровать массив $persons, сравнивая ДР с текущей датой
 // если сегодня никто не родился, то дальше ничего не далеть (exit)
 
 $from = "noreply@deeplace.md";
