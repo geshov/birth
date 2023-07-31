@@ -106,3 +106,5 @@ fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT-5j3rZHVbVl3fdH6Up-V_eR
     const month = new Birth("month", text);
     const all = new Birth("all", text);
   });
+
+// fetch("/notice.php");

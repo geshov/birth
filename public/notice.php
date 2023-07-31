@@ -12,7 +12,7 @@ $persons = array_map(function($line) {
 // здесь нужно отфильтровать массив $persons, сравнивая ДР с текущей датой
 // если сегодня никто не родился, то дальше ничего не далеть (exit)
 
-$from = "noreply@deeplace.md";
+$from = "noreply@geshov.ru";
 $to = "vladimir.plesco@gmail.com";
 $title = "Напоминание о ДР";
 $body = "<h2>Сегодня родились</h2>";
