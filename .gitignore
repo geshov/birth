@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # sftp
 sftp.json
+
+# netlify
+deploy.cmd
