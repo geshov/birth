@@ -2,7 +2,7 @@
     "git.enableSmartCommit": true,
     "git.confirmSync": false,
     "editor.tabSize": 2,
-    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
     "astro.typescript.diagnostics.enabled": false,
     "prettier.bracketSameLine": true,
     "prettier.printWidth": 100,
