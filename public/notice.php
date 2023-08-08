@@ -1,5 +1,8 @@
 <?php
 
+echo "Hello Voldemar";
+exit;
+
 $csv = file_get_contents("https://docs.google.com/spreadsheets/d/e/2PACX-1vT-5j3rZHVbVl3fdH6Up-V_eRkb35Qb6Hev1cY0FQgi6RKGrinIiJdDkBno-XxPHMpKO_3MK6Npwakb/pub?gid=0&single=true&output=csv");
 
 $lines = explode("\r\n", $csv);
