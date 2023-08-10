@@ -35,9 +35,9 @@ class Birth {
   }
 
   getPersons = () => {
-    const lines = this.text.split("\r\n");
-    const persons = lines.map((line) => {
-      const fields = line.split(",");
+    const rows = this.text.split("\r\n");
+    const persons = rows.map((row) => {
+      const fields = row.split(",");
       return { name: fields[0], birth: fields[1] };
     });
     return this.filterPersons(persons);
