@@ -6,9 +6,9 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 
   await sendEmail({
     from: "info@geshov.ru",
-    to: "vladimir.plesco@gmail.com",
-    subject: "Для Володи Плешко",
-    template: "test",
+    to: "geshov@gmail.com",
+    subject: "Уведомление о ДР",
+    template: "notice",
   });
 
   return { statusCode: 200 };
