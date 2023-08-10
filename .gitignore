@@ -23,8 +23,5 @@ pnpm-debug.log*
 # sftp deploy
 sftp.json
 
-# netlify deploy
-deploy.cmd
-
 # Local Netlify folder
 .netlify
