@@ -30,7 +30,7 @@ const tabs = [
       tabs.map((tab, index) => (
         <div
           id={`tab-content-${tab.id}`}
-          class:list={`${index !== 0 ? "hidden" : ""}`}
+          class:list={`${index === 0 ? "" : "hidden"}`}
           aria-labelledby={`tab-${tab.id}`}
           role="tabpanel">
           <div id={tab.id}>
