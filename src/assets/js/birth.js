@@ -2,12 +2,11 @@ import List from "list.js";
 
 class Birth {
 
-  constructor(id, text) {
+  constructor(id, persons) {
     this.id = id;
-    this.text = text;
     this.emptyDay = "В этот день никто не родился";
     this.emptyMonth = "В этом месяце никто не родился";
-    this.list = new List(this.id, this.getOptions(), this.getPersons());
+    this.list = new List(this.id, this.getOptions(), this.filterPersons(persons));
   }
 
   getOptions = () => {
@@ -32,15 +31,6 @@ class Birth {
         </div>`,
       }
     }
-  }
-
-  getPersons = () => {
-    const rows = this.text.split("\r\n");
-    const persons = rows.map((row) => {
-      const fields = row.split(",");
-      return { name: fields[0], birth: fields[1] };
-    });
-    return this.filterPersons(persons);
   }
 
   filterPersons = (persons) => {
@@ -102,7 +92,12 @@ class Birth {
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT-5j3rZHVbVl3fdH6Up-V_eRkb35Qb6Hev1cY0FQgi6RKGrinIiJdDkBno-XxPHMpKO_3MK6Npwakb/pub?gid=0&single=true&output=csv")
   .then(response => response.text())
   .then(text => {
-    const day = new Birth("day", text);
-    const month = new Birth("month", text);
-    const all = new Birth("all", text);
+    const rows = text.split("\r\n");
+    const persons = rows.map((row) => {
+      const fields = row.split(",");
+      return { name: fields[0], birth: fields[1] };
+    });
+    const day = new Birth("day", persons);
+    const month = new Birth("month", persons);
+    const all = new Birth("all", persons);
   });
