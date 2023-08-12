@@ -69,30 +69,20 @@ class Birth {
 
   currentDay = (person) => {
     const birthParts = person.birth.split(".");
-    const birthMonth = parseInt(birthParts[1]);
-    const birthDay = parseInt(birthParts[0]);
-    const birthOffset = birthMonth * 100 + birthDay;
+    const birthOffset = parseInt(birthParts[1]) * 100 + parseInt(birthParts[0]);
     const nowDate = new Date();
-    const nowMonth = nowDate.getMonth() + 1;
-    const nowDay = nowDate.getDate();
-    const nowOffset = nowMonth * 100 + nowDay;
+    const nowOffset = (nowDate.getMonth() + 1) * 100 + nowDate.getDate();
     return birthOffset === nowOffset;
   }
 
   nextWeek = (person) => {
     const birthParts = person.birth.split(".");
-    const birthMonth = parseInt(birthParts[1]);
-    const birthDay = parseInt(birthParts[0]);
-    const birthOffset = birthMonth * 100 + birthDay;
+    const birthOffset = parseInt(birthParts[1]) * 100 + parseInt(birthParts[0]);
     const nowDate = new Date();
-    const nowMonth = nowDate.getMonth() + 1;
-    const nowDay = nowDate.getDate();
-    const nowOffset = nowMonth * 100 + nowDay;
+    const nowOffset = (nowDate.getMonth() + 1) * 100 + nowDate.getDate();
     const weekDate = new Date();
     weekDate.setDate(weekDate.getDate() + 8);
-    const weekMonth = weekDate.getMonth() + 1;
-    const weekDay = weekDate.getDate();
-    const weekOffset = weekMonth * 100 + weekDay;
+    const weekOffset = (weekDate.getMonth() + 1) * 100 + weekDate.getDate();
     return (birthOffset > nowOffset) && (birthOffset < weekOffset);
   }
 
