@@ -9,6 +9,7 @@ class Birth {
     this.paginationItem = `<li class="group"><a class="page w-10 h-10 bg-gray-200 text-gray-800 hover:bg-blue-200 group-[.active]:bg-blue-500 group-[.active]:text-white p-4 inline-flex items-center text-sm font-medium rounded-full" href="#"></a></li>`;
     this.pageItems = 10;
     this.emptyDay = "В этот день никто не родился";
+    this.emptyWeek = "В ближайшую неделю никто не родился";
     this.emptyMonth = "В этом месяце никто не родился";
     this.list = new List(this.id, this.getOptions(), this.filterPersons(persons));
   }
@@ -33,6 +34,11 @@ class Birth {
       case "day":
         filtered = persons.filter(this.currentDay);
         if (!filtered.length) filtered = [{ name: this.emptyDay, birth: "" }];
+        break;
+      case "soon":
+        filtered = persons.filter(this.nextWeek);
+        if (!filtered.length) filtered = [{ name: this.emptyWeek, birth: "" }];
+        else filtered = this.sortByBirth(filtered);
         break;
       case "month":
         filtered = persons.filter(this.currentMonth);
@@ -73,6 +79,23 @@ class Birth {
     return birthOffset === nowOffset;
   }
 
+  nextWeek = (person) => {
+    const birthParts = person.birth.split(".");
+    const birthMonth = parseInt(birthParts[1]);
+    const birthDay = parseInt(birthParts[0]);
+    const birthOffset = birthMonth * 100 + birthDay;
+    const nowDate = new Date();
+    const nowMonth = nowDate.getMonth() + 1;
+    const nowDay = nowDate.getDate();
+    const nowOffset = nowMonth * 100 + nowDay;
+    const weekDate = new Date();
+    weekDate.setDate(weekDate.getDate() + 8);
+    const weekMonth = weekDate.getMonth() + 1;
+    const weekDay = weekDate.getDate();
+    const weekOffset = weekMonth * 100 + weekDay;
+    return (birthOffset > nowOffset) && (birthOffset < weekOffset);
+  }
+
   currentMonth = (person) => {
     const birthParts = person.birth.split(".");
     const birthMonth = parseInt(birthParts[1]);
@@ -92,6 +115,7 @@ fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT-5j3rZHVbVl3fdH6Up-V_eR
       return { name: fields[0], birth: fields[1] };
     });
     const day = new Birth("day", persons);
+    const soon = new Birth("soon", persons);
     const month = new Birth("month", persons);
     const all = new Birth("all", persons);
   });

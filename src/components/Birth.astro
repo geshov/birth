@@ -1,6 +1,7 @@
 ---
 const tabs = [
   { id: "day", name: "Сегодня" },
+  { id: "soon", name: "Скоро" },
   { id: "month", name: "Месяц" },
   { id: "all", name: "Все" },
 ];
@@ -13,7 +14,7 @@ const tabs = [
         tabs.map((tab, index) => (
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:border-b-transparent hs-tab-active:text-blue-600 -mb-px py-3 px-4 inline-flex items-center gap-2 bg-gray-50 text-sm font-medium text-center border text-gray-500 rounded-t-lg hover:text-gray-700"
+            class="hs-tab-active:bg-white hs-tab-active:border-b-transparent hs-tab-active:text-blue-600 -mb-px py-3 px-3 inline-flex items-center gap-2 bg-gray-50 text-sm font-medium text-center border text-gray-500 rounded-t-lg hover:text-gray-700"
             class:list={`${index === 0 ? "active" : ""}`}
             id={`tab-${tab.id}`}
             data-hs-tab={`#tab-content-${tab.id}`}
