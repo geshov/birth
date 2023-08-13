@@ -34,27 +34,30 @@ class Birth {
       case "day":
         filtered = persons.filter(this.currentDay);
         if (!filtered.length) filtered = [{ name: this.emptyDay, birth: "" }];
+        else filtered = this.sortByName(filtered);
         break;
       case "soon":
         filtered = persons.filter(this.nextWeek);
         if (!filtered.length) filtered = [{ name: this.emptyWeek, birth: "" }];
-        else filtered = this.sortByBirth(filtered);
+        else filtered = this.sortByBirtn(filtered);
         break;
       case "month":
         filtered = persons.filter(this.currentMonth);
         if (!filtered.length) filtered = [{ name: this.emptyMonth, birth: "" }];
-        else filtered = this.sortByBirth(filtered);
+        else filtered = this.sortByBirtn(filtered);
         break;
       default:
-        filtered = persons;
+        filtered = this.sortByName(persons);
     }
     return filtered;
   }
 
-  sortByBirth = (persons) => {
+  sortByBirtn = (persons) => {
     return persons.sort((a, b) => {
-      if (a.birth > b.birth) return 1;
-      else if (a.birth < b.birth) return -1;
+      const aa = a.date.getMonth() * 100 + a.date.getDate();
+      const bb = b.date.getMonth() * 100 + b.date.getDate();
+      if (aa > bb) return 1;
+      else if (aa < bb) return -1;
       else return 0;
     });
   }
@@ -68,42 +71,42 @@ class Birth {
   }
 
   currentDay = (person) => {
-    const birthParts = person.birth.split(".");
-    const birthOffset = parseInt(birthParts[1]) * 100 + parseInt(birthParts[0]);
-    const nowDate = new Date();
-    const nowOffset = (nowDate.getMonth() + 1) * 100 + nowDate.getDate();
-    return birthOffset === nowOffset;
+    const now = new Date();
+    return person.date.getDate() === now.getDate() && person.date.getMonth() === now.getMonth();
   }
 
   nextWeek = (person) => {
-    const birthParts = person.birth.split(".");
-    const birthOffset = parseInt(birthParts[1]) * 100 + parseInt(birthParts[0]);
-    const nowDate = new Date();
-    const nowOffset = (nowDate.getMonth() + 1) * 100 + nowDate.getDate();
-    const weekDate = new Date();
-    weekDate.setDate(weekDate.getDate() + 8);
-    const weekOffset = (weekDate.getMonth() + 1) * 100 + weekDate.getDate();
-    return (birthOffset > nowOffset) && (birthOffset < weekOffset);
+    const birth = person.date.getMonth() * 100 + person.date.getDate();
+    const date = new Date();
+    const now = date.getMonth() * 100 + date.getDate();
+    date.setDate(date.getDate() + 8);
+    const week = date.getMonth() * 100 + date.getDate();
+    return (birth > now) && (birth < week);
   }
 
   currentMonth = (person) => {
-    const birthParts = person.birth.split(".");
-    const birthMonth = parseInt(birthParts[1]);
-    const nowDate = new Date();
-    const nowMonth = nowDate.getMonth() + 1;
-    return birthMonth === nowMonth;
+    const now = new Date();
+    return person.date.getMonth() === now.getMonth();
   }
 
 }
 
-fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT-5j3rZHVbVl3fdH6Up-V_eRkb35Qb6Hev1cY0FQgi6RKGrinIiJdDkBno-XxPHMpKO_3MK6Npwakb/pub?gid=0&single=true&output=csv")
+function getPersons(text) {
+  const rows = text.split("\r\n");
+  return rows.map((row) => {
+    const fields = row.split(",");
+    const name = fields[0];
+    const dmy = fields[1].split(".");
+    const date = new Date(Number(dmy[2]), Number(dmy[1]) - 1, Number(dmy[0]));
+    const birth = date.toLocaleDateString("ru-RU", { day: "numeric", month: "short", year: "numeric" });
+    return { name: name, birth: birth, date: date };
+  });
+}
+
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_Aywj-d6NZ0rp5LZS66WR6-ex_HH9Fkp9xx9nhPwI1LGA1OwR2Mmg90dUUttFByBl91NoVDcYghqh/pub?gid=0&single=true&output=csv")
   .then(response => response.text())
   .then(text => {
-    const rows = text.split("\r\n");
-    const persons = rows.map((row) => {
-      const fields = row.split(",");
-      return { name: fields[0], birth: fields[1] };
-    });
+    const persons = getPersons(text);
     const day = new Birth("day", persons);
     const soon = new Birth("soon", persons);
     const month = new Birth("month", persons);
