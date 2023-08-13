@@ -13,6 +13,7 @@
     "@astrojs/tailwind": "^4.0.0",
     "@netlify/emails": "^1.1.0",
     "@netlify/functions": "^1.6.0",
+    "@tailwindcss/forms": "^0.5.4",
     "astro": "^2.9.7",
     "list.js": "^2.3.1",
     "netlify-cli": "^15.10.0",

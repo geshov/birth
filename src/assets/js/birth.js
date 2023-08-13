@@ -5,8 +5,8 @@ class Birth {
   constructor(id, persons) {
     this.id = id;
     this.valueNames = ["name", "birth"];
-    this.listItem = `<div class="flex justify-between py-3 border-b"><div class="name"></div><div class="birth"></div></div>`;
-    this.paginationItem = `<li class="group"><a class="page w-10 h-10 bg-gray-200 text-gray-800 hover:bg-blue-200 group-[.active]:bg-blue-500 group-[.active]:text-white p-4 inline-flex items-center text-sm font-medium rounded-full" href="#"></a></li>`;
+    this.listItem = `<div class="flex justify-between py-3 border-b border-gray-600"><div class="name"></div><div class="birth"></div></div>`;
+    this.paginationItem = `<li class="group"><a class="page w-10 h-10 bg-gray-700 text-gray-300 hover:bg-blue-500 hover:text-white group-[.active]:bg-blue-800 group-[.active]:text-gray-200 p-4 inline-flex items-center text-sm font-medium rounded-full" href="#"></a></li>`;
     this.pageItems = 10;
     this.emptyDay = "В этот день никто не родился";
     this.emptyWeek = "В ближайшую неделю никто не родился";

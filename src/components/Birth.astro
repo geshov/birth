@@ -8,13 +8,13 @@ const tabs = [
 ---
 
 <section class="_container-x _container-y">
-  <div class="border-b border-gray-300">
+  <div class="border-b border-gray-500">
     <nav class="flex space-x-2" aria-label="Tabs" role="tablist">
       {
         tabs.map((tab, index) => (
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:border-b-transparent hs-tab-active:text-blue-600 -mb-px py-3 px-3 inline-flex items-center gap-2 bg-gray-50 text-sm font-medium text-center border text-gray-500 rounded-t-lg hover:text-gray-700"
+            class="-mb-px py-3 px-3 inline-flex items-center gap-2 text-sm font-medium text-center border rounded-t-lg bg-gray-700 text-gray-300 hs-tab-active:bg-gray-800 hs-tab-active:text-gray-200 border-gray-500 hs-tab-active:border-b-transparent"
             class:list={`${index === 0 ? "active" : ""}`}
             id={`tab-${tab.id}`}
             data-hs-tab={`#tab-content-${tab.id}`}
@@ -38,11 +38,11 @@ const tabs = [
             {tab.id === "all" && (
               <input
                 type="text"
-                class="search border border-gray-400 rounded-md p-2 mt-4 mb-1"
+                class="search bg-gray-700 text-gray-300 placeholder-gray-400 border border-gray-500 rounded-md p-2 mt-4 mb-1"
                 placeholder="Поиск..."
               />
             )}
-            <div class="list text-gray-600" />
+            <div class="list text-gray-400" />
             {tab.id === "all" && (
               <ul class="pagination flex justify-center items-center space-x-2 py-10" />
             )}
