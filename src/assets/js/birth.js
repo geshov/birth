@@ -5,6 +5,7 @@ class Birth {
   constructor(id, persons) {
     this.id = id;
     this.valueNames = ["name", "birth", { name: "iso", attr: "data-iso" }];
+    this.searchColumns = ["name"];
     this.listItem = `<div class="flex justify-between py-4 border-b border-gray-600"><div class="name"></div><div class="birth iso"></div></div>`;
     this.paginationItem = `<li class="group"><a class="page w-10 h-10 bg-gray-700 text-gray-300 hover:bg-blue-600 hover:text-white group-[.active]:bg-blue-800 group-[.active]:text-gray-200 p-4 inline-flex items-center text-sm font-medium rounded-full transition-all" href="#"></a></li>`;
     this.pageItems = 10;
@@ -17,13 +18,14 @@ class Birth {
   getOptions = () => {
     const options = {
       valueNames: this.valueNames,
+      searchColumns: this.searchColumns,
       item: this.listItem,
     }
     if (this.id === "all") {
-      options.page = this.pageItems;
       options.pagination = {
         item: this.paginationItem,
       };
+      options.page = this.pageItems;
     }
     return options;
   }
