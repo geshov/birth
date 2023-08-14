@@ -8,6 +8,8 @@ class Birth {
     this.searchColumns = ["name"];
     this.listItem = `<div class="flex justify-between py-4 border-b border-gray-600"><div class="name"></div><div class="birth iso"></div></div>`;
     this.paginationItem = `<li class="group"><a class="page w-10 h-10 bg-gray-700 text-gray-300 hover:bg-blue-600 hover:text-white group-[.active]:bg-blue-800 group-[.active]:text-gray-200 p-4 inline-flex items-center text-sm font-medium rounded-full transition-all" href="#"></a></li>`;
+    this.paginationInner = 1;
+    this.paginationOuter = 1;
     this.pageItems = 10;
     this.emptyDay = "В этот день никто не родился";
     this.emptyWeek = "В ближайшую неделю никто не родился";
@@ -24,6 +26,8 @@ class Birth {
     if (this.id === "all") {
       options.pagination = {
         item: this.paginationItem,
+        innerWindow: this.paginationInner,
+        outerWindow: this.paginationOuter,
       };
       options.page = this.pageItems;
     }
