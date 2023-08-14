@@ -4,6 +4,7 @@ class Birth {
 
   constructor(id, persons) {
     this.id = id;
+    this.now = new Date();
     this.valueNames = ["name", "birth", { name: "iso", attr: "data-iso" }];
     this.searchColumns = ["name"];
     this.listItem = `<div class="flex justify-between py-4 border-b border-gray-600"><div class="name"></div><div class="birth iso"></div></div>`;
@@ -12,7 +13,7 @@ class Birth {
     this.paginationOuter = 1;
     this.pageItems = 10;
     this.emptyDay = "В этот день никто не родился";
-    this.emptyWeek = "В ближайшую неделю никто не родился";
+    this.emptyWeek = "В ближайшие дни никто не родился";
     this.emptyMonth = "В этом месяце никто не родился";
     this.list = new List(this.id, this.getOptions(), this.filterPersons(persons));
   }
@@ -35,37 +36,65 @@ class Birth {
   }
 
   filterPersons = (persons) => {
-    let filtered;
     switch (this.id) {
       case "day":
-        filtered = persons.filter(this.currentDay);
-        if (!filtered.length) filtered = [{ name: this.emptyDay, birth: "" }];
-        else filtered = this.sortByName(filtered);
-        break;
+        return this.currentDay(persons);
       case "soon":
-        filtered = persons.filter(this.nextWeek);
-        if (!filtered.length) filtered = [{ name: this.emptyWeek, birth: "" }];
-        else filtered = this.sortByBirtn(filtered);
-        break;
+        return this.nextWeek(persons);
       case "month":
-        filtered = persons.filter(this.currentMonth);
-        if (!filtered.length) filtered = [{ name: this.emptyMonth, birth: "" }];
-        else filtered = this.sortByBirtn(filtered);
-        break;
+        return this.currentMonth(persons);
       default:
-        filtered = this.sortByName(persons);
+        return this.sortByName(persons);
+    }
+  }
+
+  currentDay = (persons) => {
+    let filtered = persons.filter(person =>
+      person.date.getDate() === this.now.getDate() && person.date.getMonth() === this.now.getMonth()
+    );
+    if (filtered.length) {
+      filtered = this.sortByName(filtered);
+    } else {
+      const today = this.now.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+      filtered = [{ name: this.emptyDay, birth: today }];
     }
     return filtered;
   }
 
-  sortByBirtn = (persons) => {
-    return persons.sort((a, b) => {
-      const aa = a.date.getMonth() * 100 + a.date.getDate();
-      const bb = b.date.getMonth() * 100 + b.date.getDate();
-      if (aa > bb) return 1;
-      else if (aa < bb) return -1;
-      else return 0;
+  nextWeek = (persons) => {
+    const min = new Date();
+    min.setDate(min.getDate() + 1);
+    let from = min.getMonth() * 100 + min.getDate();
+    const max = new Date();
+    max.setDate(max.getDate() + 7);
+    let to = max.getMonth() * 100 + max.getDate();
+    let filtered = persons.filter(person => {
+      const birth = person.date.getMonth() * 100 + person.date.getDate();
+      return birth >= from && birth <= to;
     });
+    if (filtered.length) {
+      filtered = this.sortByBirtn(filtered);
+    } else {
+      from = min.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+      to = max.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+      const period = from + " - " + to;
+      filtered = [{ name: this.emptyWeek, birth: period }];
+    }
+    return filtered;
+  }
+
+  currentMonth = (persons) => {
+    let filtered = persons.filter(person =>
+      person.date.getMonth() === this.now.getMonth()
+    );
+    if (filtered.length) {
+      filtered = this.sortByBirtn(filtered);
+    } else {
+      let month = this.now.toLocaleDateString("ru-RU", { month: "long" });
+      month = month[0].toUpperCase() + month.slice(1);
+      filtered = [{ name: this.emptyMonth, birth: month }];
+    }
+    return filtered;
   }
 
   sortByName = (persons) => {
@@ -76,23 +105,14 @@ class Birth {
     });
   }
 
-  currentDay = (person) => {
-    const now = new Date();
-    return person.date.getDate() === now.getDate() && person.date.getMonth() === now.getMonth();
-  }
-
-  nextWeek = (person) => {
-    const birth = person.date.getMonth() * 100 + person.date.getDate();
-    const date = new Date();
-    const now = date.getMonth() * 100 + date.getDate();
-    date.setDate(date.getDate() + 8);
-    const week = date.getMonth() * 100 + date.getDate();
-    return (birth > now) && (birth < week);
-  }
-
-  currentMonth = (person) => {
-    const now = new Date();
-    return person.date.getMonth() === now.getMonth();
+  sortByBirtn = (persons) => {
+    return persons.sort((a, b) => {
+      const aa = a.date.getMonth() * 100 + a.date.getDate();
+      const bb = b.date.getMonth() * 100 + b.date.getDate();
+      if (aa > bb) return 1;
+      else if (aa < bb) return -1;
+      else return 0;
+    });
   }
 
 }
