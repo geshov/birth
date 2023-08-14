@@ -28,4 +28,4 @@ $headers = [
   "Content-type" => "text/html"
 ];
 
-// mail($to, $title, $body, $headers);
+mail($to, $title, $body, $headers);
