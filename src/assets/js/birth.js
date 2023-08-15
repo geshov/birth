@@ -124,7 +124,8 @@ function getPersons(text) {
     const fields = row.split(",");
     const name = fields[0];
     const dmy = fields[1].split(".");
-    const date = new Date(Number(dmy[2]), Number(dmy[1]) - 1, Number(dmy[0]));
+    let date = new Date(Number(dmy[2]), Number(dmy[1]) - 1, Number(dmy[0]));
+    if (isNaN(date.getTime())) date = new Date(1900, 0, 1);
     const iso = date.toISOString();
     const birth = date.toLocaleDateString("ru-RU", { day: "numeric", month: "short", year: "numeric" });
     return { name: name, birth: birth, date: date, iso: iso };
