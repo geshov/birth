@@ -34,7 +34,6 @@ try {
   $mail->Host = "smtp.gmail.com";
   $mail->SMTPAuth = true;
   $mail->Username = "geshov@gmail.com";
-  $mail->Password = "kicehnoiaprcdnpn";
   $mail->SMTPSecure = "tls";
   $mail->Port = 587;
   $mail->CharSet = "UTF-8";
