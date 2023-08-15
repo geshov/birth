@@ -4,9 +4,9 @@ use PHPMailer\\PHPMailer\\PHPMailer;
 use PHPMailer\\PHPMailer\\SMTP;
 use PHPMailer\\PHPMailer\\Exception;
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
+require "PHPMailer/src/Exception.php";
+require "PHPMailer/src/PHPMailer.php";
+require "PHPMailer/src/SMTP.php";
 
 $csv = file_get_contents("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_Aywj-d6NZ0rp5LZS66WR6-ex_HH9Fkp9xx9nhPwI1LGA1OwR2Mmg90dUUttFByBl91NoVDcYghqh/pub?gid=0&single=true&output=csv");
 
@@ -19,6 +19,8 @@ $persons = array_map(function($row) {
 
 // здесь нужно отфильтровать массив $persons, сравнивая ДР с текущей датой
 // если сегодня никто не родился, то дальше ничего не далеть (exit)
+
+$subject = "Напоминание о ДР";
 
 $body = "<h2>Сегодня родились</h2>";
 $body .= "<ul>";
@@ -44,7 +46,7 @@ try {
   $mail->addAddress("${import.meta.env.MAIL_FROM}");
 
   $mail->isHTML(true);
-  $mail->Subject = "Напоминание о ДР";
+  $mail->Subject = $subject;
   $mail->Body = $body;
 
   $mail->send();
