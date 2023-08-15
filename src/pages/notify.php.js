@@ -14,8 +14,13 @@ $rows = explode("\\r\\n", $csv);
 
 $persons = array_map(function($row) {
   $fields = explode(",", $row);
-  return (object) ["name" => $fields[0], "birth" => $fields[1]];
+  $name = $fields[0];
+  $birth = new DateTime($fields[1]);
+  return (object) ["name" => $name, "birth" => $birth];
 }, $rows);
+
+$now = new DateTime("now");
+$idf = new IntlDateFormatter("ru_RU", IntlDateFormatter::LONG, IntlDateFormatter::NONE, "Europe/Moscow");
 
 // здесь нужно отфильтровать массив $persons, сравнивая ДР с текущей датой
 // если сегодня никто не родился, то дальше ничего не далеть (exit)
@@ -25,7 +30,7 @@ $subject = "Напоминание о ДР";
 $body = "<h2>Сегодня родились</h2>";
 $body .= "<ul>";
 foreach ($persons as $person) {
-  $body .= "<li>" . $person->name . " (" . $person->birth . ")</li>";
+  $body .= "<li>" . $person->name . " (" . $idf->format($person->birth) . ")</li>";
 }
 $body .= "</ul>";
 
