@@ -120,16 +120,17 @@ class Birth {
 
 function getPersons(text) {
   const rows = text.split("\r\n");
-  return rows.map((row) => {
+  const persons = rows.map((row) => {
     const fields = row.split(",");
     const name = fields[0];
     const dmy = fields[1].split(".");
-    let date = new Date(Number(dmy[2]), Number(dmy[1]) - 1, Number(dmy[0]));
-    if (isNaN(date.getTime())) date = new Date(1900, 0, 1);
+    const date = new Date(Number(dmy[2]), Number(dmy[1]) - 1, Number(dmy[0]));
+    if (isNaN(date.getTime())) return false;
     const iso = date.toISOString();
     const birth = date.toLocaleDateString("ru-RU", { day: "numeric", month: "short", year: "numeric" });
     return { name: name, birth: birth, date: date, iso: iso };
   });
+  return persons.filter(person => person);
 }
 
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_Aywj-d6NZ0rp5LZS66WR6-ex_HH9Fkp9xx9nhPwI1LGA1OwR2Mmg90dUUttFByBl91NoVDcYghqh/pub?gid=0&single=true&output=csv")
