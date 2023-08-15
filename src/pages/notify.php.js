@@ -37,6 +37,8 @@ foreach ($borns as $born) {
 }
 $body .= "</ul>";
 
+$body .= '<div><a href="https://birth.geshov.ru/">Посмотреть весь список</a></div>';
+
 $mail = new PHPMailer(true);
 
 try {
@@ -52,7 +54,9 @@ try {
 
   $mail->setFrom("${import.meta.env.MAIL_FROM}");
   $mail->addAddress("${import.meta.env.MAIL_ADDRESS1}");
-  $mail->addAddress("${import.meta.env.MAIL_ADDRESS2}");
+  // $mail->addAddress("${import.meta.env.MAIL_ADDRESS2}");
+  // $mail->addAddress("${import.meta.env.MAIL_ADDRESS3}");
+  // $mail->addAddress("${import.meta.env.MAIL_ADDRESS4}");
 
   $mail->isHTML(true);
   $mail->Subject = $subject;
