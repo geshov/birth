@@ -24,7 +24,7 @@ $borns = array_filter($persons, function($person) {
   global $now;
   return $person->birth->format("n") == $now->format("n") && $person->birth->format("j") == $now->format("j");
 });
-if (empty($borns)) exit("Persons not found");
+// if (empty($borns)) exit("Persons not found");
 
 $idf = new IntlDateFormatter("ru_RU", IntlDateFormatter::LONG, IntlDateFormatter::NONE, "Europe/Moscow");
 
@@ -51,7 +51,8 @@ try {
   $mail->Encoding = "base64"; 
 
   $mail->setFrom("${import.meta.env.MAIL_FROM}");
-  $mail->addAddress("${import.meta.env.MAIL_FROM}");
+  $mail->addAddress("${import.meta.env.MAIL_ADDRESS1}");
+  $mail->addAddress("${import.meta.env.MAIL_ADDRESS2}");
 
   $mail->isHTML(true);
   $mail->Subject = $subject;
