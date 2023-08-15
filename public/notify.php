@@ -45,7 +45,6 @@ try {
   $mail->isHTML(true);
   $mail->Subject = "Напоминание о ДР";
   $mail->Body = $body;
-  // $mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 
   $mail->send();
   echo "Message has been sent";
