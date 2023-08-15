@@ -24,6 +24,3 @@ sftp.json
 
 # Local Netlify folder
 .netlify
-
-# notify.php
-notify.php
