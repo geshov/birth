@@ -1,8 +1,8 @@
 const php = `<?php
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+use PHPMailer\\PHPMailer\\PHPMailer;
+use PHPMailer\\PHPMailer\\SMTP;
+use PHPMailer\\PHPMailer\\Exception;
 
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
@@ -10,7 +10,7 @@ require 'PHPMailer/src/SMTP.php';
 
 $csv = file_get_contents("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_Aywj-d6NZ0rp5LZS66WR6-ex_HH9Fkp9xx9nhPwI1LGA1OwR2Mmg90dUUttFByBl91NoVDcYghqh/pub?gid=0&single=true&output=csv");
 
-$rows = explode("\r\n", $csv);
+$rows = explode("\\r\\n", $csv);
 
 $persons = array_map(function($row) {
   $fields = explode(",", $row);
@@ -33,14 +33,15 @@ try {
   $mail->isSMTP();
   $mail->Host = "smtp.gmail.com";
   $mail->SMTPAuth = true;
-  $mail->Username = "geshov@gmail.com";
+  $mail->Username = "${import.meta.env.MAIL_FROM}";
+  $mail->Password = "${import.meta.env.MAIL_PASSWORD}";
   $mail->SMTPSecure = "tls";
   $mail->Port = 587;
   $mail->CharSet = "UTF-8";
   $mail->Encoding = "base64"; 
 
-  $mail->setFrom("geshov@gmail.com", "Alex");
-  $mail->addAddress("geshov@gmail.com", "Alex");
+  $mail->setFrom("${import.meta.env.MAIL_FROM}");
+  $mail->addAddress("${import.meta.env.MAIL_FROM}");
 
   $mail->isHTML(true);
   $mail->Subject = "Напоминание о ДР";
