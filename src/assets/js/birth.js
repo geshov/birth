@@ -4,7 +4,6 @@ class Birth {
 
   constructor(id, persons) {
     this.id = id;
-    this.now = new Date();
     this.valueNames = ["name", "birth", { name: "iso", attr: "data-iso" }];
     this.searchColumns = ["name"];
     this.listItem = `<div class="flex justify-between py-4 border-b border-gray-600"><div class="name"></div><div class="birth iso"></div></div>`;
@@ -49,13 +48,14 @@ class Birth {
   }
 
   currentDay = (persons) => {
+    const now = new Date();
     let filtered = persons.filter(person =>
-      person.date.getDate() === this.now.getDate() && person.date.getMonth() === this.now.getMonth()
+      person.date.getDate() === now.getDate() && person.date.getMonth() === now.getMonth()
     );
     if (filtered.length) {
       filtered = this.sortByName(filtered);
     } else {
-      const today = this.now.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+      const today = now.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
       filtered = [{ name: this.emptyDay, birth: today }];
     }
     return filtered;
@@ -84,13 +84,14 @@ class Birth {
   }
 
   currentMonth = (persons) => {
+    const now = new Date();
     let filtered = persons.filter(person =>
-      person.date.getMonth() === this.now.getMonth()
+      person.date.getMonth() === now.getMonth()
     );
     if (filtered.length) {
       filtered = this.sortByBirtn(filtered);
     } else {
-      let month = this.now.toLocaleDateString("ru-RU", { month: "long" });
+      let month = now.toLocaleDateString("ru-RU", { month: "long" });
       month = month[0].toUpperCase() + month.slice(1);
       filtered = [{ name: this.emptyMonth, birth: month }];
     }
