@@ -19,18 +19,21 @@ $persons = array_map(function($row) {
   return (object) ["name" => $name, "birth" => $birth];
 }, $rows);
 
-$now = new DateTime("now");
+$now = new DateTime();
+$borns = array_filter($persons, function($person) {
+  global $now;
+  return $person->birth->format("n") == $now->format("n") && $person->birth->format("j") == $now->format("j");
+});
+if (empty($borns)) exit("Persons not found");
+
 $idf = new IntlDateFormatter("ru_RU", IntlDateFormatter::LONG, IntlDateFormatter::NONE, "Europe/Moscow");
 
-// здесь нужно отфильтровать массив $persons, сравнивая ДР с текущей датой
-// если сегодня никто не родился, то дальше ничего не далеть (exit)
-
 $subject = "Напоминание о ДР";
-
 $body = "<h2>Сегодня родились</h2>";
+
 $body .= "<ul>";
-foreach ($persons as $person) {
-  $body .= "<li>" . $person->name . " (" . $idf->format($person->birth) . ")</li>";
+foreach ($borns as $born) {
+  $body .= "<li>" . $born->name . " (" . $idf->format($born->birth) . ")</li>";
 }
 $body .= "</ul>";
 
