@@ -16,6 +16,7 @@ $rows = explode("\r\n", $csv);
 
 $persons = array_map(function($row) {
   $fields = explode(",", $row);
+  if (!strtotime($fields[1])) return false;
   $name = $fields[0];
   $birth = new DateTime($fields[1]);
   return (object) ["name" => $name, "birth" => $birth];
@@ -24,9 +25,10 @@ $persons = array_map(function($row) {
 $now = new DateTime();
 $borns = array_filter($persons, function($person) {
   global $now;
+  if (!$person) return false;
   return $person->birth->format("n") == $now->format("n") && $person->birth->format("j") == $now->format("j");
 });
-// if (empty($borns)) exit("Persons not found");
+if (empty($borns)) exit("Persons not found");
 
 $idf = new IntlDateFormatter("ru_RU", IntlDateFormatter::LONG, IntlDateFormatter::NONE, "Europe/Moscow");
 
@@ -57,7 +59,6 @@ try {
   $mail->setFrom($from);
   foreach($addresses as $address) {
     $mail->addAddress($address);
-    break; // temp
   }
 
   $mail->isHTML(true);
