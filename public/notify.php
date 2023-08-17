@@ -18,12 +18,12 @@ $persons = array_map(function($row) {
   if (!strtotime($fields[1])) return false;
   $name = $fields[0];
   $birth = new DateTime($fields[1]);
-  $addresses = array();
+  $emails = array();
   for ($i = 2; $i < count($fields); $i++) {
     $email = filter_var($fields[$i], FILTER_VALIDATE_EMAIL);
-    if ($email) $addresses[] = $email;
+    if ($email) $emails[] = $email;
   }
-  return (object) ["name" => $name, "birth" => $birth, "addresses" => $addresses];
+  return (object) ["name" => $name, "birth" => $birth, "emails" => $emails];
 }, $rows);
 
 $now = new DateTime();
@@ -39,14 +39,14 @@ $idf = new IntlDateFormatter("ru_RU", IntlDateFormatter::LONG, IntlDateFormatter
 $subject = "Напоминание о ДР";
 $body = "<h2>Сегодня родились</h2>";
 
-$addresses = array();
+$emails = array();
 $body .= "<ul>";
 foreach ($borns as $born) {
   $body .= "<li>" . $born->name . " (" . $idf->format($born->birth) . ")</li>";
-  $addresses = array_merge($addresses, $born->addresses);
+  $emails = array_merge($emails, $born->emails);
 }
 $body .= "</ul>";
-$addresses = array_unique($addresses);
+$emails = array_unique($emails);
 
 $body .= '<div><a href="https://birth.geshov.ru/">Посмотреть весь список</a></div>';
 
@@ -65,8 +65,8 @@ try {
 
   $mail->setFrom($from);
   $mail->addBCC($from);
-  foreach($addresses as $address) {
-    $mail->addAddress($address);
+  foreach($emails as $email) {
+    $mail->addAddress($email);
   }
 
   $mail->isHTML(true);
