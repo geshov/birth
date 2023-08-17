@@ -20,7 +20,8 @@ $persons = array_map(function($row) {
   $birth = new DateTime($fields[1]);
   $addresses = array();
   for ($i = 2; $i < count($fields); $i++) {
-    if (filter_var($fields[$i], FILTER_VALIDATE_EMAIL)) $addresses[] = $fields[$i];
+    $email = filter_var($fields[$i], FILTER_VALIDATE_EMAIL);
+    if ($email) $addresses[] = $email;
   }
   return (object) ["name" => $name, "birth" => $birth, "addresses" => $addresses];
 }, $rows);
