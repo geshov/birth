@@ -1,2 +1,2 @@
 @echo off
-npm run build
+npx astro build
