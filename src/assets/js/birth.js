@@ -49,12 +49,12 @@ class Birth {
 
   currentDay = (persons) => {
     const now = new Date();
-    const birth = getDateFormat(now, "iso", "birth");
+    const birth = getIsoDate(now, "birth");
     let filtered = persons.filter(person => person.birth === birth);
     if (filtered.length) {
       filtered = this.sortByName(filtered);
     } else {
-      const rus = getDateFormat(now, "rus", "birth");
+      const rus = getRusDate(now, "birth");
       filtered = [{ name: this.emptyDay, rus: rus }];
     }
     return filtered;
@@ -63,15 +63,15 @@ class Birth {
   nextWeek = (persons) => {
     const min = new Date();
     min.setDate(min.getDate() + 1);
-    const from = getDateFormat(min, "iso", "birth");
+    const from = getIsoDate(min, "birth");
     const max = new Date();
     max.setDate(max.getDate() + 7);
-    const to = getDateFormat(max, "iso", "birth");
+    const to = getIsoDate(max, "birth");
     let filtered = persons.filter(person => person.birth >= from && person.birth <= to);
     if (filtered.length) {
       filtered = this.sortByBirth(filtered);
     } else {
-      const rus = getDateFormat(min, "rus", "birth") + " - " + getDateFormat(max, "rus", "birth");
+      const rus = getRusDate(min, "birth") + " - " + getRusDate(max, "birth");
       filtered = [{ name: this.emptyWeek, rus: rus }];
     }
     return filtered;
@@ -79,12 +79,12 @@ class Birth {
 
   currentMonth = (persons) => {
     const now = new Date();
-    const month = getDateFormat(now, "iso", "month");
+    const month = getIsoDate(now, "month");
     let filtered = persons.filter(person => person.month === month);
     if (filtered.length) {
       filtered = this.sortByBirth(filtered);
     } else {
-      const rus = getDateFormat(now, "rus", "month");
+      const rus = getRusDate(now, "month");
       filtered = [{ name: this.emptyMonth, rus: rus }];
     }
     return filtered;
@@ -116,46 +116,46 @@ function getPersons(text) {
     const date = new Date(Number(dmy[2]), Number(dmy[1]) - 1, Number(dmy[0]));
     if (isNaN(date.getTime())) return false;
     const name = fields[0];
-    const rus = getDateFormat(date, "rus");
-    const iso = getDateFormat(date, "iso");
-    const birth = getDateFormat(date, "iso", "birth");
-    const month = getDateFormat(date, "iso", "month");
+    const rus = getRusDate(date);
+    const iso = getIsoDate(date);
+    const birth = getIsoDate(date, "birth");
+    const month = getIsoDate(date, "month");
     return { name: name, rus: rus, iso: iso, birth: birth, month: month };
   });
   return persons.filter(person => person);
 }
 
-function getDateFormat(date, format = "rus", part = "full") {
-  if (format == "iso") {
-    let parts;
-    const year = date.getFullYear().toString();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    switch (part) {
-      case "birth":
-        parts = [month, day];
-        break;
-      case "month":
-        parts = [month];
-        break;
-      default:
-        parts = [year, month, day];
-    }
-    return parts.join("-");
-  } else {
-    let options;
-    switch (part) {
-      case "birth":
-        options = { day: "numeric", month: "short" };
-        break;
-      case "month":
-        options = { month: "long" };
-        break;
-      default:
-        options = { day: "numeric", month: "short", year: "numeric" };
-    }
-    return date.toLocaleDateString("ru-RU", options);
+function getIsoDate(date, format = "full") {
+  let parts;
+  const year = date.getFullYear().toString();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  switch (format) {
+    case "birth":
+      parts = [month, day];
+      break;
+    case "month":
+      parts = [month];
+      break;
+    default:
+      parts = [year, month, day];
   }
+  return parts.join("-");
+}
+
+function getRusDate(date, format = "full") {
+  let options;
+  switch (format) {
+    case "birth":
+      options = { day: "numeric", month: "short" };
+      break;
+    case "month":
+      options = { month: "long" };
+      break;
+    default:
+      options = { day: "numeric", month: "short", year: "numeric" };
+  }
+  return date.toLocaleDateString("ru-RU", options);
 }
 
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_Aywj-d6NZ0rp5LZS66WR6-ex_HH9Fkp9xx9nhPwI1LGA1OwR2Mmg90dUUttFByBl91NoVDcYghqh/pub?gid=0&single=true&output=csv")
