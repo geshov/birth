@@ -2,8 +2,8 @@ import List from "list.js";
 
 class Birth {
 
-  constructor(id, persons) {
-    this.id = id;
+  constructor(text) {
+    this.persons = this.getPersons(text);
     this.valueNames = ["name", "rus", { name: "iso", attr: "data-iso" }];
     this.searchColumns = ["name"];
     this.listItem = `<div class="flex justify-between py-4 border-b border-gray-600"><div class="name shrink"></div><div class="rus iso shrink-0"></div></div>`;
@@ -14,16 +14,36 @@ class Birth {
     this.emptyDay = "В этот день никто не родился";
     this.emptyWeek = "В ближайшие дни никто не родился";
     this.emptyMonth = "В этом месяце никто не родился";
-    this.list = new List(this.id, this.getOptions(), this.filterPersons(persons));
   }
 
-  getOptions = () => {
+  addList = (id) => {
+    new List(id, this.getOptions(id), this.filterPersons(id));
+  }
+
+  getPersons = (text) => {
+    const rows = text.split("\r\n");
+    const persons = rows.map((row) => {
+      const fields = row.split(",");
+      const dmy = fields[1].split(".");
+      const date = new Date(Number(dmy[2]), Number(dmy[1]) - 1, Number(dmy[0]));
+      if (isNaN(date.getTime())) return false;
+      const name = fields[0];
+      const rus = this.getRusDate(date);
+      const iso = this.getIsoDate(date);
+      const birth = this.getIsoDate(date, "birth");
+      const month = this.getIsoDate(date, "month");
+      return { name: name, rus: rus, iso: iso, birth: birth, month: month };
+    });
+    return persons.filter(person => person);
+  }
+
+  getOptions = (id) => {
     const options = {
       valueNames: this.valueNames,
       searchColumns: this.searchColumns,
       item: this.listItem,
     }
-    if (this.id === "all") {
+    if (id === "all") {
       options.pagination = {
         item: this.paginationItem,
         innerWindow: this.paginationInner,
@@ -34,60 +54,64 @@ class Birth {
     return options;
   }
 
-  filterPersons = (persons) => {
-    switch (this.id) {
+  filterPersons = (id) => {
+    switch (id) {
       case "day":
-        return this.currentDay(persons);
+        return this.currentDayPersons();
       case "soon":
-        return this.nextWeek(persons);
+        return this.nextWeekPersons();
       case "month":
-        return this.currentMonth(persons);
+        return this.currentMonthPersons();
       default:
-        return this.sortByName(persons);
+        return this.allPersons();
     }
   }
 
-  currentDay = (persons) => {
+  currentDayPersons = () => {
     const now = new Date();
-    const birth = getIsoDate(now, "birth");
-    let filtered = persons.filter(person => person.birth === birth);
-    if (filtered.length) {
-      filtered = this.sortByName(filtered);
+    const birth = this.getIsoDate(now, "birth");
+    let persons = this.persons.filter(person => person.birth === birth);
+    if (persons.length) {
+      persons = this.sortByName(persons);
     } else {
-      const rus = getRusDate(now, "birth");
-      filtered = [{ name: this.emptyDay, rus: rus }];
+      const rus = this.getRusDate(now, "birth");
+      persons = [{ name: this.emptyDay, rus: rus }];
     }
-    return filtered;
+    return persons;
   }
 
-  nextWeek = (persons) => {
+  nextWeekPersons = () => {
     const min = new Date();
     min.setDate(min.getDate() + 1);
-    const from = getIsoDate(min, "birth");
+    const from = this.getIsoDate(min, "birth");
     const max = new Date();
     max.setDate(max.getDate() + 7);
-    const to = getIsoDate(max, "birth");
-    let filtered = persons.filter(person => person.birth >= from && person.birth <= to);
-    if (filtered.length) {
-      filtered = this.sortByBirth(filtered);
+    const to = this.getIsoDate(max, "birth");
+    let persons = this.persons.filter(person => person.birth >= from && person.birth <= to);
+    if (persons.length) {
+      persons = this.sortByBirth(persons);
     } else {
-      const rus = getRusDate(min, "birth") + " - " + getRusDate(max, "birth");
-      filtered = [{ name: this.emptyWeek, rus: rus }];
+      const rus = this.getRusDate(min, "birth") + " - " + this.getRusDate(max, "birth");
+      persons = [{ name: this.emptyWeek, rus: rus }];
     }
-    return filtered;
+    return persons;
   }
 
-  currentMonth = (persons) => {
+  currentMonthPersons = () => {
     const now = new Date();
-    const month = getIsoDate(now, "month");
-    let filtered = persons.filter(person => person.month === month);
-    if (filtered.length) {
-      filtered = this.sortByBirth(filtered);
+    const month = this.getIsoDate(now, "month");
+    let persons = this.persons.filter(person => person.month === month);
+    if (persons.length) {
+      persons = this.sortByBirth(persons);
     } else {
-      const rus = getRusDate(now, "month");
-      filtered = [{ name: this.emptyMonth, rus: rus }];
+      const rus = this.getRusDate(now, "month");
+      persons = [{ name: this.emptyMonth, rus: rus }];
     }
-    return filtered;
+    return persons;
+  }
+
+  allPersons = () => {
+    return this.sortByName(this.persons);
   }
 
   sortByName = (persons) => {
@@ -106,64 +130,47 @@ class Birth {
     });
   }
 
-}
-
-function getPersons(text) {
-  const rows = text.split("\r\n");
-  const persons = rows.map((row) => {
-    const fields = row.split(",");
-    const dmy = fields[1].split(".");
-    const date = new Date(Number(dmy[2]), Number(dmy[1]) - 1, Number(dmy[0]));
-    if (isNaN(date.getTime())) return false;
-    const name = fields[0];
-    const rus = getRusDate(date);
-    const iso = getIsoDate(date);
-    const birth = getIsoDate(date, "birth");
-    const month = getIsoDate(date, "month");
-    return { name: name, rus: rus, iso: iso, birth: birth, month: month };
-  });
-  return persons.filter(person => person);
-}
-
-function getIsoDate(date, format = "full") {
-  let parts;
-  const year = date.getFullYear().toString();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  switch (format) {
-    case "birth":
-      parts = [month, day];
-      break;
-    case "month":
-      parts = [month];
-      break;
-    default:
-      parts = [year, month, day];
+  getIsoDate = (date, format = "full") => {
+    let parts;
+    const year = date.getFullYear().toString();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    switch (format) {
+      case "birth":
+        parts = [month, day];
+        break;
+      case "month":
+        parts = [month];
+        break;
+      default:
+        parts = [year, month, day];
+    }
+    return parts.join("-");
   }
-  return parts.join("-");
-}
 
-function getRusDate(date, format = "full") {
-  let options;
-  switch (format) {
-    case "birth":
-      options = { day: "numeric", month: "short" };
-      break;
-    case "month":
-      options = { month: "long" };
-      break;
-    default:
-      options = { day: "numeric", month: "short", year: "numeric" };
+  getRusDate = (date, format = "full") => {
+    let options;
+    switch (format) {
+      case "birth":
+        options = { day: "numeric", month: "short" };
+        break;
+      case "month":
+        options = { month: "long" };
+        break;
+      default:
+        options = { day: "numeric", month: "short", year: "numeric" };
+    }
+    return date.toLocaleDateString("ru-RU", options);
   }
-  return date.toLocaleDateString("ru-RU", options);
+
 }
 
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_Aywj-d6NZ0rp5LZS66WR6-ex_HH9Fkp9xx9nhPwI1LGA1OwR2Mmg90dUUttFByBl91NoVDcYghqh/pub?gid=0&single=true&output=csv")
   .then(response => response.text())
   .then(text => {
-    const persons = getPersons(text);
-    const day = new Birth("day", persons);
-    const soon = new Birth("soon", persons);
-    const month = new Birth("month", persons);
-    const all = new Birth("all", persons);
+    const birth = new Birth(text);
+    birth.addList("day");
+    birth.addList("soon");
+    birth.addList("month");
+    birth.addList("all");
   });
