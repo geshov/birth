@@ -6,7 +6,7 @@ class Birth {
     this.persons = this.getPersons(text);
     this.valueNames = ["name", "rus", { name: "iso", attr: "data-iso" }];
     this.searchColumns = ["name"];
-    this.listItem = `<div class="flex justify-between py-4 border-b border-gray-600"><div class="name shrink"></div><div class="rus iso shrink-0"></div></div>`;
+    this.listItem = `<div class="flex justify-between gap-5 py-4 border-b border-gray-600"><div class="name shrink"></div><div class="rus iso shrink-0"></div></div>`;
     this.paginationItem = `<li class="group"><a class="page w-10 h-10 bg-gray-700 text-gray-300 hover:bg-blue-600 hover:text-white group-[.active]:bg-blue-800 group-[.active]:text-gray-200 p-4 inline-flex items-center text-sm font-medium rounded-full transition-all" href="#"></a></li>`;
     this.paginationInner = 1;
     this.paginationOuter = 1;
