@@ -9,12 +9,12 @@
   <div class="flex gap-2 shrink-0">
     <button
       type="button"
-      class="sort asc p-3 rounded-md text-sm font-semibold transition-all bg-blue-800 hover:bg-blue-700 text-gray-200"
+      class="sort asc py-3 px-2 lg:px-3 rounded-md text-sm font-semibold-old transition-all bg-blue-800 hover:bg-blue-700 text-gray-200"
       data-sort="name">Имя</button
     >
     <button
       type="button"
-      class="sort p-3 rounded-md text-sm font-semibold transition-all bg-blue-800 hover:bg-blue-700 text-gray-200"
+      class="sort py-3 px-2 lg:px-3 rounded-md text-sm font-semibold-old transition-all bg-blue-800 hover:bg-blue-700 text-gray-200"
       data-sort="iso">Дата</button
     >
   </div>
@@ -22,9 +22,9 @@
 
 <style>
   .sort.asc::after {
-    content: "▲";
+    content: " ▲";
   }
   .sort.desc::after {
-    content: "▼";
+    content: " ▼";
   }
 </style>
