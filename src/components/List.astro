@@ -12,12 +12,12 @@ const tabs = [
 
 <section class="_container-x _container-y">
   <div class="border-b border-gray-500">
-    <nav class="flex space-x-1 lg:space-x-2" aria-label="Tabs" role="tablist">
+    <nav class="flex gap-2" aria-label="Tabs" role="tablist">
       {
         tabs.map((tab, index) => (
           <button
             type="button"
-            class="-mb-px py-3 px-1 md:px-2 lg:px-3 text-xs lg:text-sm text-center border rounded-t-lg bg-gray-700 text-gray-300 hs-tab-active:bg-gray-800 hs-tab-active:text-gray-200 border-gray-500 hs-tab-active:border-b-transparent"
+            class="flex-auto -mb-px py-3 text-xs lg:text-sm text-center border rounded-t-lg bg-gray-700 text-gray-300 hs-tab-active:bg-gray-800 hs-tab-active:text-gray-200 border-gray-500 hs-tab-active:border-b-transparent"
             class:list={`${index === 0 ? "active" : ""}`}
             id={`tab-${tab.id}`}
             data-hs-tab={`#tab-content-${tab.id}`}
