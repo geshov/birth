@@ -160,7 +160,7 @@ class Birth {
       default:
         options = { day: "numeric", month: "short", year: "numeric" };
     }
-    return date.toLocaleDateString("ru-RU", options);
+    return date.toLocaleDateString("ru-RU", options).replace(/\sг\./, "");
   }
 
 }
