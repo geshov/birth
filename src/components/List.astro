@@ -18,7 +18,7 @@ const tabs = [
           <button
             type="button"
             class="flex-auto sm:flex-none -mb-px py-3 sm:px-3 text-xs sm:text-sm text-center border rounded-t-lg bg-gray-700 text-gray-300 hs-tab-active:bg-gray-800 hs-tab-active:text-gray-200 border-gray-500 hs-tab-active:border-b-transparent"
-            class:list={`${index === 0 ? "active" : ""}`}
+            class:list={index === 0 ? "active" : ""}
             id={`tab-${tab.id}`}
             data-hs-tab={`#tab-content-${tab.id}`}
             aria-controls={`tab-content-${tab.id}`}
@@ -33,7 +33,7 @@ const tabs = [
     {
       tabs.map((tab, index) => (
         <div
-          class:list={`${index === 0 ? "" : "hidden"}`}
+          class:list={index === 0 ? "" : "hidden"}
           id={`tab-content-${tab.id}`}
           aria-labelledby={`tab-${tab.id}`}
           role="tabpanel">
