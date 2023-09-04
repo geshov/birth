@@ -17,7 +17,8 @@ class Birth {
   }
 
   addList = (id) => {
-    new List(id, this.getOptions(id), this.filterPersons(id));
+    const list = new List(id, this.getOptions(id), this.filterPersons(id));
+    list.remove("iso", "0");
   }
 
   getPersons = (text) => {
