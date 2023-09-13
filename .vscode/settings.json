@@ -3,9 +3,7 @@
     "git.confirmSync": false,
     "editor.tabSize": 2,
     "terminal.integrated.defaultProfile.windows": "Command Prompt",
-    "astro.typescript.diagnostics.enabled": false,
     "prettier.bracketSameLine": true,
-    "prettier.printWidth": 100,
     "javascript.validate.enable": false,
     "typescript.validate.enable": false,
 }
