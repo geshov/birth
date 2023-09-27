@@ -108,6 +108,13 @@ class Birth {
 
   selectMonth = (month) => {
     const select = document.querySelector(".month");
+    let option;
+    for (let i = 0; i < 12; i++) {
+      option = document.createElement("option");
+      option.value = (i + 1).toString().padStart(2, "0")
+      option.text = this.getMonthName(option.value);
+      select.add(option);
+    }
     select.value = month;
     select.addEventListener("change", () => {
       this.list["month"].clear();
