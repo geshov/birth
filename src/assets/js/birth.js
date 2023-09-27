@@ -102,12 +102,25 @@ class Birth {
   currentMonthPersons = () => {
     const now = new Date();
     const month = this.getIsoDate(now, "month");
+    this.selectMonth(month);
+    return this.monthPersons(month);
+  }
+
+  selectMonth = (month) => {
+    const select = document.querySelector(".month");
+    select.value = month;
+    select.addEventListener("change", () => {
+      this.list["month"].clear();
+      this.list["month"].add(this.monthPersons(select.value));
+    });
+  }
+
+  monthPersons = (month) => {
     let persons = this.persons.filter(person => person.month === month);
     if (persons.length) {
       persons = this.sortByBirth(persons);
     } else {
-      const rus = this.getRusDate(now, "month");
-      persons = [{ name: this.emptyMonth, rus: rus }];
+      persons = [{ name: this.emptyMonth, rus: this.getMonthName(month) }];
     }
     return persons;
   }
@@ -162,7 +175,14 @@ class Birth {
       default:
         options = { day: "numeric", month: "short", year: "numeric" };
     }
-    return date.toLocaleDateString("ru-RU", options).replace(/\sг\./, "");
+    return date.toLocaleDateString("ru-RU", options).replace(" г.", "");
+  }
+
+  getMonthName = (month) => {
+    const months = [
+      "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+    ];
+    return months[Number(month) - 1];
   }
 
 }
