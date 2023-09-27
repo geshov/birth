@@ -14,11 +14,12 @@ class Birth {
     this.emptyDay = "В этот день никто не родился";
     this.emptyWeek = "В ближайшие дни никто не родился";
     this.emptyMonth = "В этом месяце никто не родился";
+    this.list = [];
   }
 
   addList = (id) => {
-    const list = new List(id, this.getOptions(id), this.filterPersons(id));
-    list.remove("iso", "0");
+    this.list[id] = new List(id, this.getOptions(id), this.filterPersons(id));
+    this.list[id].remove("iso", "0");
   }
 
   getPersons = (text) => {
