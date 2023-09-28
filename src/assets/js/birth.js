@@ -107,7 +107,8 @@ class Birth {
   }
 
   selectMonth = (month) => {
-    const select = document.querySelector(".month");
+    const select = document.querySelector("select.month");
+    if (!select) return;
     let option;
     for (let i = 0; i < 12; i++) {
       option = document.createElement("option");
