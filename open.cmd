@@ -1,2 +1,3 @@
 @echo off
-npx astro build && npx astro preview --open
+npx astro build && ^
+npx astro preview --open
