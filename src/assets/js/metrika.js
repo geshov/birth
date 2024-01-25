@@ -27,7 +27,7 @@ const metrika = () => {
 
 if (
   navigator.language === "en-US" &&
-  document.referrer.indexOf(window.location.hostname) === -1
+  !document.referrer.includes(window.location.hostname)
 ) {
   window.addEventListener("scroll", metrika, { once: true });
 } else {
